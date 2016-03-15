@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            class="org.eclipse.qvt.declarative.execution.ui.launching.DeclarativeQVTTabGroup"
+            id="org.eclipse.qvt.declarative.execution.main"
+            type="org.eclipse.qvt.declarative.execution">
+      </launchConfigurationTabGroup>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="org.eclipse.qvt.declarative.execution.ui.monitoring.ExecutionEngineMonitorViewPart"
+            id="org.eclipse.qvt.declarative.execution.ui.view1"
+            name="Execution Engine Monitor"
+            restorable="true">
+      </view>
+   </extension>
+
+</plugin>

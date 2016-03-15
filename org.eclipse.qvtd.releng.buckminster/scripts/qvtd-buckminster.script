@@ -1,0 +1,22 @@
+setpref complianceLevel=1.8
+
+# We import a target definition which will be our API Base Line
+importtargetdefinition "file://${checkout.location}/org.eclipse.qvtd.git/releng/org.eclipse.qvtd.releng.buckminster/APIBaseLine.target"
+addbaseline -A "Eclipse QVTd API Base Line"
+
+# We set the path of the new target platform
+setpref targetPlatformPath="${checkout.location}/buildroot/target.platform"
+
+import --properties "${checkout.location}/buildroot/build.properties" "org.eclipse.qvtd.git/releng/org.eclipse.qvtd.releng.buckminster/releng/qvtd-all.mspec"
+
+build
+
+junit --launch "org.eclipse.qvtd.all.tests/.launches/All\ QVTd\ Tests\ \(standalone\).launch" --flatXML --output "${checkout.location}/MMT-QVTd.test.results/org.eclipse.qvtd.xtext.qvtd.all.xml"
+junit --launch "org.eclipse.qvtd.all.tests/.launches/All\ QVTd\ Tests\ \(Plugin\).launch" --flatXML --output "${checkout.location}/MMT-QVTd.test.results/org.eclipse.qvtd.xtext.qvtd.all.plugin.xml"
+
+perform --properties "${checkout.location}/buildroot/build.properties" "-Dbuckminster.reference.repository=${reference.repository}" "org.eclipse.qvtd.releng.build:eclipse.feature#build"
+perform --properties "${checkout.location}/buildroot/build.properties" "org.eclipse.qvtd.releng.buckminster:buckminster#setup.promoter"
+perform --properties "${checkout.location}/buildroot/build.properties" "org.eclipse.qvtd.releng.buckminster:buckminster#setup.publisher"
+
+#perform --properties "${checkout.location}/publishroot/publisher.properties" "org.eclipse.qvtd.releng.buckminster:buckminster#publish.build"
+#perform --properties "${checkout.location}/buildroot/tagging.properties" "org.eclipse.FIXME.build#tag"

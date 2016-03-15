@@ -1,0 +1,51 @@
+/*******************************************************************************
+ * Copyright (c) 2010 Willink Transformations and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     E.D.Willink - initial API and implementation
+ *
+ * Run As->MWE2 Workflow to regenerate the Xtest CST models.
+ *******************************************************************************/
+module GenerateQVTdCGModels
+
+import org.eclipse.qvtd.build.modelspecs.*
+import org.eclipse.qvtd.build.utilities.*
+import org.eclipse.ocl.examples.build.utilities.*
+import org.eclipse.ocl.examples.build.xtend.*
+import org.eclipse.emf.mwe.utils.*
+import org.eclipse.emf.mwe.utils.*
+import org.eclipse.emf.ecore.resource.impl.*
+
+/**
+ *	Generate the Concrete Syntax Models used by the Xtext editors.
+ */
+Workflow {
+	bean = ResourceSetImpl : resourceSet {}
+    bean = StandaloneSetup { resourceSet = resourceSet
+    	platformUri = ".."
+    	scanClassPath = true
+    	registerGeneratedEPackage = "org.eclipse.xtext.common.types.TypesPackage"
+    }
+    bean = EcoreGenModelSetup { resourceSet = resourceSet }
+	bean = QVTdCGTypedElementModelSpec.Register {}
+	bean = QVTdCGValuedElementModelSpec.Register {}
+
+    component = GenerateModel { resourceSet = resourceSet skipOnErrors = true
+    	genModel = "/org.eclipse.qvtd.codegen/model/qvticgmodel.genmodel" 	
+    }
+    component = GenerateCGVisitors { resourceSet = resourceSet
+    	projectName = "org.eclipse.qvtd.codegen"
+    	genModelFile = "model/qvticgmodel.genmodel"
+    	superProjectName = "org.eclipse.ocl.examples.codegen"
+    	superGenModelFile = "model/cgmodel.genmodel"
+    	baseProjectName = "org.eclipse.ocl.examples.codegen"
+    	baseGenModelFile = "model/cgmodel.genmodel"
+    }
+	component = ConvertToUnixLineEndings {
+		directory = "org.eclipse.qvtd.codegen/emf-gen"
+	}
+}

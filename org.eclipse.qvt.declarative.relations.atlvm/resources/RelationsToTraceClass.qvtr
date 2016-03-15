@@ -1,0 +1,76 @@
+transformation RelationsToTraceClass(relations:{Relations, Templates, OCL, Ecore}, core:Ecore) {
+
+  key EPackage{name};
+  key EClass{ePackage, name};
+  key EStructuralFeature{eContainingClass, name};
+
+  top relation TransformationToPackage {
+    domain relations rt : RelationalTransformation {
+      name = rtn,
+      nsPrefix = rtp,
+      nsURI = rtu
+    };
+    enforce domain core p:EPackage{
+      name = rtn,
+      nsPrefix = rtp,
+      nsURI = rtu
+    };
+    where {
+      RelationToTraceClass(rt,p);
+    }
+  }
+
+  relation RelationToTraceClass  {
+    rn, vn:String;
+    domain relations rt: RelationalTransformation {
+      rule = r:Relation {
+        name = rn,
+        _domain = rd:RelationDomain {
+          pattern = rdp:DomainPattern {
+            templateExpression = t:ObjectTemplateExp {
+              bindsTo = tv:Variable {
+                name = vn,
+                eType = c:EClass {}
+              }
+            }
+          }
+        }
+      }
+    };
+    enforce domain core p:EPackage {
+      eClassifiers = rc:EClass {
+        name = 'T'+rn,
+        eStructuralFeatures = a:EReference {
+          name = vn,
+          eType = c
+        }
+      }
+    };
+    where {
+      SubTemplateToTraceClassProps(t, rc);
+    }
+  }
+
+  relation SubTemplateToTraceClassProps {
+    vn: String;
+    domain relations t:ObjectTemplateExp {
+      part = pt:PropertyTemplateItem {
+        value = tp:ObjectTemplateExp {
+          bindsTo = tv:Variable {
+            name = vn,
+            eType = c:EClass {}
+          }
+        }
+      }
+    };
+    enforce domain core rc:EClass {
+      eStructuralFeatures = a:EReference {
+        name=vn,
+        eType=c
+      }
+    };
+    where {
+      SubTemplateToTraceClassProps(tp, rc);
+    }
+  }
+}

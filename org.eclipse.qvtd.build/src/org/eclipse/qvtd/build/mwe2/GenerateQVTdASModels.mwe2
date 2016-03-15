@@ -1,0 +1,112 @@
+/*******************************************************************************
+ * Copyright (c) 2011 Willink Transformations and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     E.D.Willink - initial API and implementation
+ *
+ * Run As->MWE2 Workflow to regenerate the AST models.
+ *******************************************************************************/
+module GenerateQVTdASModels
+
+import org.eclipse.ocl.examples.build.*
+import org.eclipse.ocl.examples.build.utilities.*
+import org.eclipse.ocl.examples.build.xtend.*
+import org.eclipse.qvtd.build.utilities.*
+import org.eclipse.emf.mwe.utils.*
+import org.eclipse.emf.ecore.resource.impl.*
+
+/**
+ *	Generate the Pivot-based Models.
+ */
+Workflow {
+	bean = ResourceSetImpl : resourceSet {}
+    bean = StandaloneSetup { resourceSet = resourceSet
+    	platformUri = ".."
+    	scanClassPath = true
+    }
+    bean = EcoreGenModelSetup { resourceSet = resourceSet }
+
+    component = @SubGenerateASModel { resourceSet = resourceSet
+    	projectName = "org.eclipse.qvtd.pivot.qvtbase"
+    	genModelFile =  "model/QVTbase.genmodel"
+    	superProjectName = "org.eclipse.ocl.pivot"
+    	superGenModelFile = "model/Pivot.genmodel"
+    	baseProjectName = "org.eclipse.ocl.pivot"
+    	baseGenModelFile = "model/Pivot.genmodel"
+    }
+    
+    component = GenerateOCLmetamodelXtend { //resourceSet = resourceSet
+    	projectName = "org.eclipse.qvtd.pivot.qvtbase"
+    	modelFile = "model/QVTbase.ecore"
+    	uri = "http://www.eclipse.org/qvt/2015/QVTbase"
+    	javaFolder = "emf-gen"
+    	javaPackageName = "org.eclipse.qvtd.pivot.qvtbase.model"
+    	javaClassName = "QVTbaseMetamodel"
+    	generatedClassNameMap = {
+    		from = "http://www.eclipse.org/ocl/2015/Pivot"
+    		to = "org.eclipse.ocl.pivot.model.OCLmetamodel"
+    	}
+    	generatedClassNameMap = {
+    		from = "http://www.eclipse.org/ocl/2015/Library"
+    		to = "org.eclipse.ocl.pivot.model.OCLstdlib"
+    	}
+//    	generatedClassNameMap = {
+//    		from = "http://www.eclipse.org/qvt/2015/QVTbase"
+//    		to = "org.eclipse.qvtd.pivot.qvtbase.model.QVTbaseMetamodel"
+//    	}
+    }
+    component = @SubGenerateASModel { resourceSet = resourceSet
+    	projectName = "org.eclipse.qvtd.pivot.qvtcorebase"
+    	genModelFile =  "model/QVTcoreBase.genmodel"
+    	superProjectName = "org.eclipse.qvtd.pivot.qvtbase"
+    	superGenModelFile = "model/QVTbase.genmodel"
+    	baseProjectName = "org.eclipse.ocl.pivot"
+    	baseGenModelFile = "model/Pivot.genmodel"
+    }
+    component = @SubGenerateASModel { resourceSet = resourceSet
+    	projectName = "org.eclipse.qvtd.pivot.qvtcore"
+    	genModelFile =  "model/QVTcore.genmodel"
+    	superProjectName = "org.eclipse.qvtd.pivot.qvtcorebase"
+    	superGenModelFile = "model/QVTcoreBase.genmodel"
+    	baseProjectName = "org.eclipse.ocl.pivot"
+    	baseGenModelFile = "model/Pivot.genmodel"
+    }
+    component = @SubGenerateASModel { resourceSet = resourceSet
+    	projectName = "org.eclipse.qvtd.pivot.qvtimperative"
+    	genModelFile =  "model/QVTimperative.genmodel"
+    	superProjectName = "org.eclipse.qvtd.pivot.qvtcorebase"
+    	superGenModelFile = "model/QVTcoreBase.genmodel"
+    	baseProjectName = "org.eclipse.ocl.pivot"
+    	baseGenModelFile = "model/Pivot.genmodel"
+    }
+    component = @SubGenerateASModel { resourceSet = resourceSet
+    	projectName = "org.eclipse.qvtd.pivot.qvttemplate"
+    	genModelFile =  "model/QVTtemplate.genmodel"
+    	superProjectName = "org.eclipse.qvtd.pivot.qvtbase"
+    	superGenModelFile = "model/QVTbase.genmodel"
+    	baseProjectName = "org.eclipse.ocl.pivot"
+    	baseGenModelFile = "model/Pivot.genmodel"
+    }
+    component = @SubGenerateASModel { resourceSet = resourceSet
+    	projectName = "org.eclipse.qvtd.pivot.qvtrelation"
+    	genModelFile =  "model/QVTrelation.genmodel"
+    	superProjectName = "org.eclipse.qvtd.pivot.qvttemplate"
+    	superGenModelFile = "model/QVTtemplate.genmodel"
+    	baseProjectName = "org.eclipse.ocl.pivot"
+    	baseGenModelFile = "model/Pivot.genmodel"
+    }
+//    component = @SubGenerateASModel { resourceSet = resourceSet
+//    	projectName = "org.eclipse.qvtd.pivot.schedule"
+//    	modelName = "Schedule"
+//    	projectPrefix = "Schedule"
+//    	superProjectName = "org.eclipse.qvtd.pivot.qvtcorebase"
+//    	superProjectPrefix = "QVTcoreBase"
+//    	modelPackageName = "org.eclipse.qvtd.pivot.schedule"
+//    	visitorPackageName = "org.eclipse.qvtd.pivot.qvtrelation.util"
+//    }
+	component = @GenerateQVTdScheduleModels {}
+}

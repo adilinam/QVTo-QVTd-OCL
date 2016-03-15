@@ -1,0 +1,29 @@
+/*******************************************************************************
+ * Copyright (c) 2013 Willink Transformations and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     E.D.Willink - initial API and implementation
+ *
+ * Run As->MWE2 Workflow to regenerate all editors and models.
+ *******************************************************************************/
+module GenerateQVTdAll
+
+/**
+ * Generate all auto-generated files for the QVTd Editors
+ */
+Workflow {
+  component = @GenerateQVTdASModels {}
+  component = @GenerateQVTdLibraryModels {}
+  component = @GenerateQVTdScheduleModels {}
+  component = @GenerateQVTdEvaluationStatusModels {}
+  component = @GenerateQVTdCSModels {}
+  component = @GenerateQVTdCGModels {}
+  component = @GenerateQVTcoreBaseEditor {}
+  component = @GenerateQVTcoreEditor {}
+  component = @GenerateQVTimperativeEditor {}
+  component = @GenerateQVTrelationEditor {}
+}

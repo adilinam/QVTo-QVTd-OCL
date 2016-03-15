@@ -1,0 +1,46 @@
+/*******************************************************************************
+ * Copyright (c) 2015 Willink Transformations Ltd., University of York and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Adolfo Sanchez-Barbudo Herrera (University of York) - initial API and implementation
+ * 
+ *  This is to generate the cs2ascgmodel.genmodel and related facilities 
+ *******************************************************************************/
+module org.eclipse.qvtd.cs2as.compiler.tests.GenerateExample2Models
+
+import org.eclipse.ocl.examples.build.utilities.*
+import org.eclipse.ocl.examples.build.xtend.*
+import org.eclipse.qvtd.cs2as.build.modelspecs.*
+import org.eclipse.emf.mwe.utils.*
+import org.eclipse.emf.ecore.resource.impl.*
+
+var projectName = "org.eclipse.qvtd.cs2as.compiler"
+
+Workflow {
+	bean = ResourceSetImpl : resourceSet {}
+    bean = StandaloneSetup { resourceSet = resourceSet
+    	platformUri = ".."
+    	scanClassPath = true
+    }
+    bean = EcoreGenModelSetup { resourceSet = resourceSet }
+	bean = CS2ASCGValuedElementModelSpec.Register {}
+
+	component = GenerateModel { resourceSet = resourceSet skipOnErrors = true
+    	genModel = "/${projectName}/model/cs2ascgmodel.genmodel"
+    }
+
+    component = GenerateCGVisitors { resourceSet = resourceSet
+    	projectName = "${projectName}"
+		genModelFile = "model/cs2ascgmodel.genmodel"
+    	superProjectName = "org.eclipse.ocl.examples.codegen"
+    	superGenModelFile = "model/cgmodel.genmodel"
+    	baseProjectName = "org.eclipse.ocl.examples.codegen"
+    	baseGenModelFile = "model/cgmodel.genmodel"
+    }
+}
+
+

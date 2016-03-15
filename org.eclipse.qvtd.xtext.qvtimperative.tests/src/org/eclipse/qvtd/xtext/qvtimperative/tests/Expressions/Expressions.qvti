@@ -1,0 +1,41 @@
+import ecore : 'http://www.eclipse.org/emf/2002/Ecore';
+
+transformation Expressions {
+	source imports ecore;
+	target imports ecore;
+	middle imports ecore;
+}
+
+map expressionsLM in Expressions {
+	check source(dummy:EPackage) {}
+	enforce middle() {}
+    where () {}
+    call expressionsMR {
+    	binaryPrecedence := (1 + 2) * (3*5 + 4);
+    	unaryPrecedence := -1 * - -1;
+    }
+}
+
+map expressionsMR in Expressions {
+	check middle(binaryPrecedence:OclAny, unaryPrecedence:OclAny) { }
+    enforce target() {}
+    where () {}
+}
+
+map expressionsDomains in Expressions {
+	check middle() {
+		s : Integer := 0,
+		s_1 : Integer := m,
+		s_2 : Integer := t
+	}
+    enforce target() {
+		t : Integer := 0,
+		t_1 : Integer := s,
+		t_2 : Integer := m
+    }
+    where () {
+		m : Integer := 0,
+		m_1 : Integer := s,
+		m_2 : Integer := t
+    }
+}

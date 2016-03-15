@@ -1,0 +1,71 @@
+import 'Tree.ecore'::tree;
+import 'TallTree.ecore'::talltree;
+import 'Tree2TallTree.ecore'::tree2talltree;
+
+transformation Tree2TallTree {
+	tree imports tree;
+	talltree imports talltree;
+	tree2talltree imports tree2talltree;
+}
+
+map __root__ in Tree2TallTree {
+    for node : tree::Node in tree.objectsOfKind(Node)->sortedBy(name) {
+        call Node2MiddleNode {
+            node := node;
+        } 
+    } 
+    for node : tree::Node in tree.objectsOfKind(Node)->sortedBy(name) {
+        call Edge2MiddleEdge {
+            node := node;
+            node2tallNode := node.Node2TallNode;
+        } 
+    } 
+    for node2tallNode : tree2talltree::Node2TallNode in tree2talltree.objectsOfKind(Node2TallNode)->sortedBy(name) {
+        call MiddleNode2TallNode {
+            node2tallNode ?= node2tallNode;			--isPolled
+        } 
+    } 
+}
+
+map Node2MiddleNode in Tree2TallTree {
+	check tree(node : Node) {} 
+	enforce tree2talltree() {
+		realize node2tallNode : Node2TallNode
+	}
+	where() {
+		node2tallNode.node := node;
+		node2tallNode.name := node.name;
+	}
+}
+
+map Edge2MiddleEdge in Tree2TallTree {
+	check tree(node : Node) {} 
+	enforce tree2talltree {
+		enforce Node2TallNode::parent
+	} (node2tallNode : Node2TallNode) {
+--		realize node2tallNode : Node2TallNode
+	}
+	where(node.parent <> null;) {
+		node2tallNode.parent := node.parent.Node2TallNode;
+--		node2tallNode.name := node.name;
+	}
+}
+
+map MiddleNode2TallNode in Tree2TallTree {
+	check tree2talltree {
+		check Node2TallNode::tallNode, Node2TallNode::children
+		enforce Node2TallNode::tallNode
+	} (node2tallNode : Node2TallNode) {} 
+	enforce talltree {
+		check TallNode::height
+		enforce TallNode::height
+	} () {
+		realize tallNode : TallNode
+	}
+	where() {
+		node2tallNode.tallNode := tallNode;
+		tallNode.name := node2tallNode.name;
+		tallNode.children := node2tallNode.children?.tallNode;
+		tallNode.height := if node2tallNode.children->notEmpty() then node2tallNode.children.tallNode.height->max() + 1 else 0 endif;
+	}
+}

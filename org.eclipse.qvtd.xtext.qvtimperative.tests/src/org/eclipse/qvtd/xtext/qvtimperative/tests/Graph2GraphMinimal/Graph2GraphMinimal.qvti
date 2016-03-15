@@ -1,0 +1,43 @@
+import SimpleGraph : 'SimpleGraph.ecore'::simplegraph;
+import SimpleGraph2Graph : 'SimpleGraph2Graph.ecore'::simplegraph2graph;
+
+transformation CopyGraphMinimal {
+	upperGraph imports SimpleGraph;
+	lowerGraph imports SimpleGraph;
+	middle imports SimpleGraph2Graph;
+}
+
+map graph2graphLM in CopyGraphMinimal {
+	check upperGraph(g1:Graph) {}
+	enforce middle() {
+		realize g2g:Graph2Graph
+	}
+    where () {
+        g2g.graph1 := g1;
+        g2g.name := g1.name;
+    }
+    call graph2graphMR {
+    	g2gout := g2g;
+    }
+}
+
+map graph2graphMR in CopyGraphMinimal {
+	check middle(g2gout:Graph2Graph) { }
+    enforce lowerGraph() {
+        realize g2:Graph
+    }
+    where () {		-- M to R for G
+		g2gout.graph2 := g2;
+        g2.name := g2gout.name;
+    }
+}
+
+map __root__ in CopyGraphMinimal {
+    
+    where () {}
+    for g1 : SimpleGraph::Graph in SimpleGraph::Graph.allInstances() {
+        call graph2graphLM {
+            g1 := g1;
+        }
+    }
+}

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<qvtoperational.expr:OperationalTransformation xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:eimpocl="http://www.eclipse.org/qvt/1.0/ImperativeOCL" xmlns:ocl.ecore="http://www.eclipse.org/ocl/1.1.0/Ecore"
+    xmlns:qvtoperational.expr="http://www.eclipse.org/qvt/1.0.0/Operational/Expressions" xsi:schemaLocation="http://www.eclipse.org/emf/2002/Ecore java://org.eclipse.emf.ecore.EcorePackage http://www.eclipse.org/qvt/1.0/ImperativeOCL java://org.eclipse.m2m.qvt.oml.ecore.ImperativeOCL.ImperativeOCLPackage http://www.eclipse.org/ocl/1.1.0/Ecore java://org.eclipse.ocl.ecore.EcorePackage http://www.eclipse.org/qvt/1.0.0/Operational/Expressions java://org.eclipse.m2m.internal.qvt.oml.expressions.ExpressionsPackage"
+    name="Simpleuml_To_Rdb" instanceClassName="org.eclipse.m2m.internal.qvt.oml.evaluator.TransformationInstance"
+    eSuperTypes="http://www.eclipse.org/m2m/qvt/oml/1.0.0/Stdlib#//Transformation" nsPrefix="Simpleuml_To_Rdb" usedModelType="traditionalAS_SimpleUml2Rdb.qvtoas#//A traditionalAS_SimpleUml2Rdb.qvtoas#//B traditionalAS_SimpleUml2Rdb.qvtoas#//simpleuml traditionalAS_SimpleUml2Rdb.qvtoas#//rdb">
+  <eOperations xsi:type="qvtoperational.expr:MappingOperation" name="main" eType="ecore:EClass http://www.eclipse.org/qvt/1.0.0/Operational/examples/rdb#//Model">
+    <eParameters xsi:type="qvtoperational.expr:MappingParameter" name="model" eType="ecore:EClass http://www.eclipse.org/qvt/1.0.0/Operational/examples/simpleuml#//Model"
+        representedParameter="qvtoperational.expr:MappingParameter traditionalAS_SimpleUml2Rdb.qvtoas#//main/model" extent="traditionalAS_SimpleUml2Rdb.qvtoas#//$model"/>
+    <body xsi:type="qvtoperational.expr:MappingBody">
+      <content xsi:type="qvtoperational.expr:ObjectExp" name="result" eType="ecore:EClass http://www.eclipse.org/qvt/1.0.0/Operational/examples/rdb#//Model"
+          extent="traditionalAS_SimpleUml2Rdb.qvtoas#//$result" instantiatedClass="http://www.eclipse.org/qvt/1.0.0/Operational/examples/rdb#//Model"
+          referredObject="traditionalAS_SimpleUml2Rdb.qvtoas#//main/result">
+        <body>
+          <content xsi:type="eimpocl:AssignExp" eType="ocl.ecore:PrimitiveType http://www.eclipse.org/ocl/1.1.0/oclstdlib.ecore#/0/String"
+              isReset="true">
+            <left xsi:type="ocl.ecore:PropertyCallExp" eType="ocl.ecore:PrimitiveType http://www.eclipse.org/ocl/1.1.0/oclstdlib.ecore#/0/String"
+                referredProperty="ecore:EAttribute http://www.eclipse.org/qvt/1.0.0/Operational/examples/rdb#//NamedElement/name">
+              <source xsi:type="ocl.ecore:VariableExp" name="result" eType="ecore:EClass http://www.eclipse.org/qvt/1.0.0/Operational/examples/rdb#//Model"
+                  referredVariable="traditionalAS_SimpleUml2Rdb.qvtoas#//main/result"/>
+            </left>
+            <value xsi:type="ocl.ecore:PropertyCallExp" eType="ocl.ecore:PrimitiveType http://www.eclipse.org/ocl/1.1.0/oclstdlib.ecore#/0/String"
+                referredProperty="ecore:EAttribute http://www.eclipse.org/qvt/1.0.0/Operational/examples/simpleuml#//ModelElement/name">
+              <source xsi:type="ocl.ecore:VariableExp" name="model" eType="ecore:EClass http://www.eclipse.org/qvt/1.0.0/Operational/examples/simpleuml#//Model"
+                  referredVariable="traditionalAS_SimpleUml2Rdb.qvtoas#//main/model"/>
+            </value>
+          </content>
+        </body>
+      </content>
+    </body>
+    <result xsi:type="qvtoperational.expr:MappingParameter" name="result" eType="ecore:EClass http://www.eclipse.org/qvt/1.0.0/Operational/examples/rdb#//Model"
+        representedParameter="qvtoperational.expr:MappingParameter traditionalAS_SimpleUml2Rdb.qvtoas#//main/result" kind="out" extent="traditionalAS_SimpleUml2Rdb.qvtoas#//$result"/>
+  </eOperations>
+  <eClassifiers xsi:type="qvtoperational.expr:ModelType" name="A" instanceClassName="org.eclipse.m2m.internal.qvt.oml.evaluator.ModelInstance"
+      eSuperTypes="http://www.eclipse.org/m2m/qvt/oml/1.0.0/Stdlib#//Model" metamodel="http://www.eclipse.org/qvt/1.0.0/Operational/examples/simpleuml#/"/>
+  <eClassifiers xsi:type="qvtoperational.expr:ModelType" name="B" instanceClassName="org.eclipse.m2m.internal.qvt.oml.evaluator.ModelInstance"
+      eSuperTypes="http://www.eclipse.org/m2m/qvt/oml/1.0.0/Stdlib#//Model" metamodel="http://www.eclipse.org/qvt/1.0.0/Operational/examples/rdb#/"/>
+  <eClassifiers xsi:type="qvtoperational.expr:ModelType" name="simpleuml" metamodel="http://www.eclipse.org/qvt/1.0.0/Operational/examples/simpleuml#/"/>
+  <eClassifiers xsi:type="qvtoperational.expr:ModelType" name="rdb" metamodel="http://www.eclipse.org/qvt/1.0.0/Operational/examples/rdb#/"/>
+  <ownedVariable name="this" eType="qvtoperational.expr:OperationalTransformation traditionalAS_SimpleUml2Rdb.qvtoas#/"/>
+  <modelParameter name="$model" eType="qvtoperational.expr:ModelType traditionalAS_SimpleUml2Rdb.qvtoas#//simpleuml">
+    <eAnnotations source="http://www.eclipse.org/m2m/1.0.0/QVT/autoModelParam"/>
+  </modelParameter>
+  <modelParameter name="$result" eType="qvtoperational.expr:ModelType traditionalAS_SimpleUml2Rdb.qvtoas#//rdb" kind="out">
+    <eAnnotations source="http://www.eclipse.org/m2m/1.0.0/QVT/autoModelParam"/>
+  </modelParameter>
+</qvtoperational.expr:OperationalTransformation>
